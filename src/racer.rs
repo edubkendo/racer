@@ -179,14 +179,14 @@ fn locate_defn_in_module(pos: uint, msrc: &str, filepath: &Path,
 
                 if modname.starts_with("self::") {
                     let mut l = modname.split_str("::");
-                    let c : ~[&str] = l.collect();
-                    if c.ends_with([""]) {
-                        let mut c2 = c.slice_to(c.len()-1).to_owned();
-                        c2.push(defnstr);
-                        locate_path_via_module(filepath, c2.slice_from(1), outputfn);
-                        } else if c[c.len()-1].starts_with(defnstr) {
-                            locate_path_via_module(filepath, c.slice_from(1), outputfn);
-                        }
+                    let mut c : Vec<&str> = l.collect();
+                    if c.as_slice().ends_with([""]) {
+                        c.pop();
+                        c.push(defnstr);
+                        locate_path_via_module(filepath, c.slice_from(1), outputfn);
+                    } else if c.as_slice()[c.len()-1].starts_with(defnstr) {
+                        locate_path_via_module(filepath, c.slice_from(1), outputfn);
+                    }
                 }
             }
         }
